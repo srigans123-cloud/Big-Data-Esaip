@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Byte Conversion Calculator</title>
+<style>
+    * { box-sizing: border-box; }
+    body {
+        margin: 0;
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 24px;
+        font-family: Arial, Helvetica, sans-serif;
+        background: linear-gradient(135deg, #eef2ff, #f8fafc);
+        color: #172033;
+    }
+    .calculator {
+        width: min(680px, 100%);
+        background: white;
+        border-radius: 20px;
+        padding: 32px;
+        box-shadow: 0 15px 45px rgba(0,0,0,.10);
+    }
+    h1 { margin: 0 0 8px; font-size: 30px; }
+    .subtitle { margin: 0 0 28px; color: #64748b; }
+    .row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 16px;
+        margin-bottom: 18px;
+    }
+    label {
+        display: block;
+        font-weight: 700;
+        margin-bottom: 8px;
+    }
+    input, select, button {
+        width: 100%;
+        min-height: 48px;
+        border-radius: 10px;
+        border: 1px solid #cbd5e1;
+        padding: 0 14px;
+        font-size: 16px;
+        background: white;
+    }
+    input:focus, select:focus {
+        outline: 3px solid #dbeafe;
+        border-color: #2563eb;
+    }
+    button {
+        border: 0;
+        background: #2563eb;
+        color: white;
+        font-weight: 700;
+        cursor: pointer;
+        margin-top: 6px;
+    }
+    button:hover { background: #1d4ed8; }
+    .result {
+        margin-top: 24px;
+        padding: 22px;
+        border-radius: 14px;
+        background: #f1f5f9;
+        text-align: center;
+    }
+    .result-label { color: #64748b; font-size: 14px; }
+    #result {
+        margin-top: 8px;
+        font-size: 25px;
+        font-weight: 800;
+        overflow-wrap: anywhere;
+    }
+    #system {
+        margin-top: 8px;
+        color: #64748b;
+        font-size: 14px;
+    }
+    .info {
+        margin-top: 22px;
+        padding: 16px;
+        border-left: 4px solid #2563eb;
+        background: #f8fafc;
+        color: #475569;
+        line-height: 1.6;
+    }
+    .quick {
+        margin-top: 24px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+    .quick button {
+        width: auto;
+        min-height: 40px;
+        margin: 0;
+        padding: 0 14px;
+        background: #e2e8f0;
+        color: #172033;
+    }
+    .quick button:hover { background: #cbd5e1; }
+    @media (max-width: 600px) {
+        .row { grid-template-columns: 1fr; }
+        .calculator { padding: 22px; }
+    }
+</style>
+</head>
+
+<body>
+<main class="calculator">
+    <h1>💾 Byte Conversion Calculator</h1>
+    <p class="subtitle">Convert digital storage units accurately.</p>
+
+    <div class="row">
+        <div>
+            <label for="value">Value</label>
+            <input id="value" type="number" min="0" step="any" value="1">
+        </div>
+
+        <div>
+            <label for="from">From</label>
+            <select id="from">
+                <option value="B">Byte (B)</option>
+                <option value="KB">Kilobyte (KB)</option>
+                <option value="MB">Megabyte (MB)</option>
+                <option value="GB">Gigabyte (GB)</option>
+                <option value="TB" selected>Terabyte (TB)</option>
+                <option value="PB">Petabyte (PB)</option>
+                <option value="KiB">Kibibyte (KiB)</option>
+                <option value="MiB">Mebibyte (MiB)</option>
+                <option value="GiB">Gibibyte (GiB)</option>
+                <option value="TiB">Tebibyte (TiB)</option>
+                <option value="PiB">Pebibyte (PiB)</option>
+            </select>
+        </div>
+    </div>
+
+    <div>
+        <label for="to">Convert To</label>
+        <select id="to">
+            <option value="B">Byte (B)</option>
+            <option value="KB">Kilobyte (KB)</option>
+            <option value="MB" selected>Megabyte (MB)</option>
+            <option value="GB">Gigabyte (GB)</option>
+            <option value="TB">Terabyte (TB)</option>
+            <option value="PB">Petabyte (PB)</option>
+            <option value="KiB">Kibibyte (KiB)</option>
+            <option value="MiB">Mebibyte (MiB)</option>
+            <option value="GiB">Gibibyte (GiB)</option>
+            <option value="TiB">Tebibyte (TiB)</option>
+            <option value="PiB">Pebibyte (PiB)</option>
+        </select>
+    </div>
+
+    <button id="calculate" type="button">Calculate Conversion</button>
+
+    <section class="result" aria-live="polite">
+        <div class="result-label">Exact Result</div>
+        <div id="result">1 TB = 1,000,000 MB</div>
+        <div id="system">Decimal system: 1 KB = 1,000 bytes.</div>
+    </section>
+
+    <div class="quick">
+        <button type="button" data-example="1|TB|MB">1 TB → MB</button>
+        <button type="button" data-example="1|TB|GB">1 TB → GB</button>
+        <button type="button" data-example="1|TiB|GiB">1 TiB → GiB</button>
+        <button type="button" data-example="1024|MB|GB">1024 MB → GB</button>
+    </div>
+
+    <div class="info">
+        <strong>Unit systems:</strong><br>
+        Decimal: KB = 1,000 bytes, MB = 1,000,000 bytes, etc.<br>
+        Binary: KiB = 1,024 bytes, MiB = 1,048,576 bytes, etc.
+    </div>
+</main>
+
+<script>
+const decimal = {
+    B: 1,
+    KB: 1000,
+    MB: 1000 ** 2,
+    GB: 1000 ** 3,
+    TB: 1000 ** 4,
+    PB: 1000 ** 5
+};
+
+const binary = {
+    B: 1,
+    KiB: 1024,
+    MiB: 1024 ** 2,
+    GiB: 1024 ** 3,
+    TiB: 1024 ** 4,
+    PiB: 1024 ** 5
+};
+
+function bytesPerUnit(unit) {
+    if (unit in decimal) return decimal[unit];
+    if (unit in binary) return binary[unit];
+    throw new Error("Unknown unit");
+}
+
+function formatNumber(number) {
+    if (!Number.isFinite(number)) return "Result is too large";
+    if (Number.isInteger(number)) {
+        return number.toLocaleString("en-US");
+    }
+    return number.toLocaleString("en-US", {
+        maximumFractionDigits: 15
+    });
+}
+
+function calculate() {
+    const value = Number(document.getElementById("value").value);
+    const from = document.getElementById("from").value;
+    const to = document.getElementById("to").value;
+
+    const resultElement = document.getElementById("result");
+    const systemElement = document.getElementById("system");
+
+    if (!Number.isFinite(value) || value < 0) {
+        resultElement.textContent = "Please enter a valid non-negative number.";
+        systemElement.textContent = "";
+        return;
+    }
+
+    const bytes = value * bytesPerUnit(from);
+    const result = bytes / bytesPerUnit(to);
+
+    resultElement.textContent =
+        `${formatNumber(value)} ${from} = ${formatNumber(result)} ${to}`;
+
+    const fromDecimal = from in decimal;
+    const toDecimal = to in decimal;
+
+    if (fromDecimal && toDecimal) {
+        systemElement.textContent =
+            "Decimal system: units are based on powers of 1,000.";
+    } else if (!fromDecimal && !toDecimal) {
+        systemElement.textContent =
+            "Binary system: units are based on powers of 1,024.";
+    } else {
+        systemElement.textContent =
+            "Mixed conversion: calculated through bytes using each unit's definition.";
+    }
+}
+
+document.getElementById("calculate").addEventListener("click", calculate);
+
+document.getElementById("value").addEventListener("keydown", function(event) {
+    if (event.key === "Enter") calculate();
+});
+
+document.querySelectorAll("[data-example]").forEach(button => {
+    button.addEventListener("click", () => {
+        const [value, from, to] = button.dataset.example.split("|");
+        document.getElementById("value").value = value;
+        document.getElementById("from").value = from;
+        document.getElementById("to").value = to;
+        calculate();
+    });
+});
+
+calculate();
+</script>
+</body>
+</html>
